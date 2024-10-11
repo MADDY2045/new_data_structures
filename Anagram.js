@@ -53,3 +53,24 @@ function areObjectsEqual(obj1, obj2) {
 
   return true;
 }
+
+/**
+ * Another example
+ */
+function sameFrequency(str1, str2) {
+  // good luck. Add any arguments you deem necessary.
+  let obj1 = {};
+  let obj2 = {};
+  //basecheck
+  if (str1.length !== str2.length) return false;
+  let lowerCaseStrOne = String(str1).replace(/\s+/g, '').toLowerCase();
+  let lowerCaseStrTwo = String(str2).replace(/\s+/g, '').toLowerCase();
+  for (let char of lowerCaseStrOne) {
+    obj1[char] = (obj1[char] || 0) + 1;
+  }
+  for (let char of lowerCaseStrTwo) {
+    obj2[char] = (obj2[char] || 0) + 1;
+  }
+
+  return areObjectsEqual(obj1, obj2);
+}
