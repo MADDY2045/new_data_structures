@@ -74,3 +74,28 @@ function sameFrequency(str1, str2) {
 
   return areObjectsEqual(obj1, obj2);
 }
+
+/**
+ * AreThereany duplicates using freq counter
+ * Approach
+ * Initialise an obj to get hold of occurences of each chat from the args
+ * loop thr the keys and check if any key has a value greater than one, if yes return true
+ * else return false
+ */
+function areThereDuplicates(...args) {
+  let obj = {};
+  for (let val of args) {
+    obj[val] = (obj[val] || 0) + 1;
+  }
+
+  for (let key in obj) {
+    if (obj[key] > 1) {
+      return true;
+    }
+  }
+  return false;
+}
+
+console.log(areThereDuplicates(1, 2, 3)); // false
+console.log(areThereDuplicates(1, 2, 2)); // true
+console.log(areThereDuplicates('a', 'b', 'c', 'a')); //true
