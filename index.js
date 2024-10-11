@@ -1,96 +1,54 @@
 /**
- * Multiple pointers
- * Creating pointers / values that correspond to an
- * index or position and move towards the beginning
- * , end or middle based on a certain condition
+ * Sliding Window
+ * This Pattern involves creating a window which can be
+ * an array/number/strimg from one position to another
+ * Depending on a certain condition, the window either
+ * increases or closes and a new window is created
  *
- * Very efficient for solving problems with
- * minimal space complexity
+ * usecase:
+ * Very Useful for keeping track of a subset of data in
+ * an array/string etc.
  */
 
 //Problem
 /**
- * Write a function to sumZero of a given sorted array that will return the first available array pairs
- * that sums upto zero and return the array as pairs
- * else return []
+ * maxSubArraySum
+ * Write a function called maxSubArraySum
+ * which accepts an array of integers and a
+ * number called n and returning the max sum
+ * of n consecutive elements in the array
  */
-
-let inputOne = [1, 2, 5, -2, 9]; //output [2,-2]
-let inputTwo = [3, 2, 5, -2, 9, -3]; //output [3,-3]
-let inputThree = [3, 2, 5, 2, 9, 3]; //output []
 
 /**
  * Approach
  * ----------
- * We adopt two pointer techniques as the array is sorted
- * Will initialize left and right pointers
- * Will check if left < right, and sum of the two values are zero
- * if "zero" , return the pairs as left and right
- * else if sum > 0, we need to decrease the right pointer
- * else increase the left pointer
- * finally , if nothing is true, return empty array
+ * We adopt sliding window technique
+ * will initialise a tempsum to zero and maxSum to zero
+ * Will get the sum of n passed numbers from array and store it in the maxSum
+ * And now, using sliding window, will loop through the array starting from num to end of array
+ * and get the tempsum = maxSum - <old first index element> + <current available element>
+ * now get the max b/w tempsum and maxsum and assign it to maxSum and repeat the process
+ * finally return the maxSum
  */
 
-function sumZero(arr) {
-  //initialise pointers
-  let left = 0;
-  let right = arr.length - 1;
-
-  while (left < right) {
-    let sum = arr[left] + arr[right];
-    if (sum === 0) {
-      return [arr[left], arr[right]];
-    } else if (sum > 0) {
-      right--;
-    } else {
-      left++;
-    }
-  }
-  return [];
-}
-
-// console.log(sumZero(inputOne));
-// console.log(sumZero(inputTwo));
-// console.log(sumZero(inputThree));
-
-//countUniqueValues
-
-/**
- * Implement a function called countUniqueValues, which accepts a sorted array, and counts the unique values in the array. 
- * There can be negative numbers in the array, but it will always be sorted.
-    countUniqueValues([1,1,1,1,1,2]) // 2
-    countUniqueValues([1,2,3,4,4,4,7,7,12,12,13]) // 7
-    countUniqueValues([]) // 0
-    countUniqueValues([-2,-1,-1,0,1]) // 4
-    Time Complexity - O(n)
-    Space Complexity - O(n)
-*/
-
-function countUniqueValues(arr) {
-  /**
-   * let's use a two pointer technique to countUniqueValues
-   * Approach
-   * Initialise the left pointer to zero
-   * right pointer to left + 1
-   * loop through right till end of array and see if the arr[left] is not
-   * equal to arr[right] and if yes, increment the left by one and replace the
-   * current arr[left] with arr[right] value
-   * return the next left pointer
-   */
-
+function maxSubArraySum(arr, num) {
+  /* intialize variables for tempSum and maxSum */
+  let tempSum = 0;
+  let maxSum = 0;
   //basecheck
-  if (arr.length === 0) return 0;
-  let left = 0;
-  for (let right = 1; right < arr.length; right++) {
-    if (arr[left] !== arr[right]) {
-      left++;
-      arr[left] = arr[right];
-    }
+  if (arr.length === 0 || !num) return null;
+  /* get the sum of n passed numbers */
+  for (let i = 0; i < num; i++) {
+    maxSum += arr[i];
   }
-  return left + 1; //positions to the next index value
+  for (let i = num; i < arr.length; i++) {
+    //tempsum = maxSum - <old first index element> + <current available element>
+    tempSum = maxSum - arr[i - num] + arr[i];
+    maxSum = Math.max(tempSum, maxSum);
+  }
+  return maxSum;
 }
 
-console.log(countUniqueValues([1, 1, 1, 1, 1, 2])); // 2
-console.log(countUniqueValues([1, 2, 3, 4, 4, 4, 7, 7, 12, 12, 13])); // 7
-console.log(countUniqueValues([])); // 0
-console.log(countUniqueValues([-2, -1, -1, 0, 1])); // 4
+console.log(maxSubArraySum([1, 2, 5, 2, 8, 1, 5], 2)); //output 10
+console.log(maxSubArraySum([1, 2, 5, 2, 8, 1, 5], 4)); //output [3,-3]
+console.log(maxSubArraySum([], 4)); //null
