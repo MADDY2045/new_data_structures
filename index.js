@@ -1,54 +1,61 @@
 /**
- * Sliding Window
- * This Pattern involves creating a window which can be
- * an array/number/strimg from one position to another
- * Depending on a certain condition, the window either
- * increases or closes and a new window is created
+ * Divide and conquer
+ * This Pattern involves dividing a data set into
+ * smaller chunks and then repeating a process
+ * with a subset of data
  *
- * usecase:
- * Very Useful for keeping track of a subset of data in
- * an array/string etc.
+ * This pattern can reduce time complexity ver much
  */
 
 //Problem
 /**
- * maxSubArraySum
- * Write a function called maxSubArraySum
- * which accepts an array of integers and a
- * number called n and returning the max sum
- * of n consecutive elements in the array
+ * Search an element in an array
+ * Given a sorted array of integers, write a search
+ * function that accepts an array and integer and
+ * returns the index where the value is located
+ * based on the number we pass in as second argument
  */
 
 /**
  * Approach
  * ----------
- * We adopt sliding window technique
- * will initialise a tempsum to zero and maxSum to zero
- * Will get the sum of n passed numbers from array and store it in the maxSum
- * And now, using sliding window, will loop through the array starting from num to end of array
- * and get the tempsum = maxSum - <old first index element> + <current available element>
- * now get the max b/w tempsum and maxsum and assign it to maxSum and repeat the process
- * finally return the maxSum
+ * We adopt divide and conquer method
+ * we will use the median value adjusted to and fro to get the search result
+ * For that
+ * Initialise a min and max value
+ * Then till min is less than or equal to max,
+ * get the middle currentElement value and check if that value is equal to the target search, if Yes
+ * return that middle
+ * or else if currentElement value is greater than target => max = middle - 1
+ * or else if currentElement value is less than target => min = middle + 1
+ * return -1 as fallback
+ *
+ *    *--------------*--------------*
+ *   Min            Middle           Max
  */
 
-function maxSubArraySum(arr, num) {
+function search(arr, num) {
   /* intialize variables for tempSum and maxSum */
-  let tempSum = 0;
-  let maxSum = 0;
-  //basecheck
+  let min = 0;
+  let max = arr.length - 1;
+  //baseCheck
   if (arr.length === 0 || !num) return null;
-  /* get the sum of n passed numbers */
-  for (let i = 0; i < num; i++) {
-    maxSum += arr[i];
+
+  while (min <= max) {
+    //get the middle value
+    let middle = Math.floor((max + min) / 2);
+    let currentElement = arr[middle];
+    if (currentElement === num) {
+      return middle;
+    } else if (currentElement > num) {
+      max = middle - 1;
+    } else if (currentElement < num) {
+      min = middle + 1;
+    }
   }
-  for (let i = num; i < arr.length; i++) {
-    //tempsum = maxSum - <old first index element> + <current available element>
-    tempSum = maxSum - arr[i - num] + arr[i];
-    maxSum = Math.max(tempSum, maxSum);
-  }
-  return maxSum;
+  return -1;
 }
 
-console.log(maxSubArraySum([1, 2, 5, 2, 8, 1, 5], 2)); //output 10
-console.log(maxSubArraySum([1, 2, 5, 2, 8, 1, 5], 4)); //output [3,-3]
-console.log(maxSubArraySum([], 4)); //null
+console.log(search([1, 2, 5, 8, 1, 5], 2)); //output 1
+console.log(search([1, 2, 5, 2, 8, 1, 4], 4)); //output 6
+console.log(search([], 4)); //null
