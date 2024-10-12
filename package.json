@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "new_data_structures": "file:",
     "nodemon": "^3.1.7"
   }
 }
