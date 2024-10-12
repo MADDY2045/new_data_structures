@@ -138,3 +138,87 @@ function minSubArrayLen(arr, target) {
 const array = [2, 3, 1, 2, 4, 3];
 const target = 7;
 console.log(minSubArrayLen(array, target)); // Output: 2 (because [4, 3] is the smallest subarray)
+
+/**
+ * Alright, finding the longest substring with all unique characters using the sliding window approach is a classic DSA problem.
+ * Let’s break it down.
+ * Step-by-Step Explanation:
+ * -------------------------
+ * Initialize Variables:
+ * ---------------------
+ * start pointer to denote the beginning of the window.
+ * maxLength to store the length of the longest substring found.
+ * charIndexMap to store the latest index of each character.
+ * Expand the Window:
+ * ------------------
+ * Use a end pointer to expand the window by iterating through the string.
+ * Check for Duplicates:
+ * ---------------------
+ * If a character is repeated, adjust the start pointer to ensure all characters within the window are unique.
+ * Update the Length:
+ * Continuously update maxLength with the maximum length found during the process.
+ */
+
+/**
+ * Detailed Walkthrough:
+Initialization:
+start is set to 0 (the start of the window).
+maxLength is set to 0 to keep track of the longest substring length.
+charIndexMap is an object to store the most recent index of each character encountered.
+Iterate Through the String:
+First Iteration (end = 0):
+--------------------------
+Character is a.
+Update charIndexMap with {'a': 0}.
+Update maxLength to 1 (substring is "a").
+Second Iteration (end = 1):
+----------------------------
+Character is b.
+Update charIndexMap with {'a': 0, 'b': 1}.
+Update maxLength to 2 (substring is "ab").
+Third Iteration (end = 2):
+--------------------------
+Character is c.
+Update charIndexMap with {'a': 0, 'b': 1, 'c': 2}.
+Update maxLength to 3 (substring is "abc").
+Fourth Iteration (end = 3):
+--------------------------
+Character is a, which is already in charIndexMap at index 0.
+Move start to 1 (max(start, charIndexMap[a] + 1)) to avoid duplicate 'a'.
+Update charIndexMap with the new index of a.
+Continue This Process:
+----------------------
+Adjust the start pointer whenever a duplicate character is found.
+Update charIndexMap and maxLength accordingly.
+Result:
+-------
+By the end of the loop, maxLength will hold the length of the longest substring without repeating characters.
+This sliding window technique ensures the algorithm runs efficiently with a time complexity of O(n).
+*/
+
+function findLongestSubstring(s) {
+  let start = 0;
+  let maxLength = 0;
+  let charIndexMap = {};
+
+  for (let end = 0; end < s.length; end++) {
+    const currentChar = s[end];
+
+    if (charIndexMap[currentChar] !== undefined) {
+      // Move the start pointer to the right of the last occurrence of the current character
+      start = Math.max(start, charIndexMap[currentChar] + 1);
+    }
+
+    // Update the current character's index in the map
+    charIndexMap[currentChar] = end;
+
+    // Update maxLength if we found a longer substring
+    maxLength = Math.max(maxLength, end - start + 1);
+  }
+
+  return maxLength;
+}
+
+// Example usage
+const exampleString = 'abcabcbb';
+console.log(findLongestSubstring(exampleString)); // Output: 3 (the longest substring is "abc")
