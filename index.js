@@ -1,407 +1,164 @@
 /**
- * Math.pow()
- * Step-by-Step Explanation:
- * Base Case:
- * If n is 0, return 1 (since any number raised to the power of 0 is 1).
- * If n  is 1, return x (since any number raised to the power of 1 is the number itself).
- * Recursive Case:
- * If n is even, recursively calculate
- * pow(x,n/2) and square the result.
- * If n is odd, multiply x with the result of the recursive call pow(x,n−1).
+ * Bubble Sort is one of the simplest sorting algorithms, making it an excellent way to understand the basics of sorting.
+ * Here's a detailed breakdown of how it works:
  */
 
 /**
- * Detailed Walkthrough:
+ * Bubble Sort is one of the simplest sorting algorithms, making it an excellent way to understand the basics of sorting. 
+ * Here's a detailed breakdown of how it works:
+
+Bubble Sort Basics
+Concept:
+--------
+Bubble Sort repeatedly steps through the list, compares adjacent elements, and swaps them if they are in the wrong order. 
+This process repeats until the list is sorted.
+
+Algorithm:
+-----------
+Start from the beginning of the array.
+Compare the first two elements.
+If the first element is greater than the second, swap them.
+Move to the next pair of elements and repeat step 3.
+Continue this process until the end of the array.
+Repeat the entire process for all elements until no swaps are needed.
+*/
+
+/**
+ * Detailed Walkthrough
+Initialization:
+---------------
+n is set to the length of the array.
+swapped is a boolean flag to track if any swaps were made during the pass.
+Outer Loop (do-while):
+---------------------
+This loop ensures the process repeats until no swaps are needed.
+Inner Loop (for):
+------------------
+Iterates through the array up to n - 1.
+Compares each element with its next neighbor.
+If the current element is greater, they are swapped.
+Swapping:
+----------
+Using array destructuring, swap arr[i] and arr[i + 1].
+Update swapped Flag:
+--------------------
+If a swap occurs, set swapped to true.
+Reduce n:
+----------
+Decrement n by 1 after each complete pass since the last element is now in its correct position.
+Return Sorted Array:
+--------------------
+The outer loop stops when no swaps are needed, meaning the array is sorted.
+
+Advantages and Disadvantages
+Advantages:
+------------
+Simple to understand and implement.
+Good for small datasets or nearly sorted arrays.
+
+Disadvantages:
+--------------
+Inefficient for large datasets, with a worst-case time complexity of O(n^2).
+Not suitable for professional use with large data.
+*/
+
+function bubbleSort(arr) {
+  let n = arr.length;
+  let swapped;
+
+  // Outer loop to repeat the process
+  do {
+    swapped = false;
+
+    // Inner loop for comparing and swapping adjacent elements
+    for (let i = 0; i < n - 1; i++) {
+      if (arr[i] > arr[i + 1]) {
+        // Swap the elements es 2025 syntax
+        [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
+        /**
+         * classical way
+         * let temp = arr[i]
+         * arr[i] = arr[i+1]
+         * arr[i+1] = temp
+         */
+        swapped = true;
+      }
+    }
+
+    // Reduce the array size by one after each complete pass
+    n--;
+  } while (swapped);
+
+  return arr;
+}
+
+// Example usage
+const array = [5, 1, 4, 2, 8];
+console.log(bubbleSort(array)); // Output: [1, 2, 4, 5, 8]
+
+/**
+ * Selection Sort Basics
+ * Concept:
+ * Selection Sort works by dividing the array into a sorted and an unsorted region.
+ * It repeatedly selects the smallest (or largest, depending on the order) element
+ * from the unsorted region and moves it to the sorted region.
+ *
+ *
+ * Algorithm:
+ * ----------
+ * Start with the first element as the minimum.
+ * Compare this element with the next elements to find the smallest element in the unsorted region.
+ * Swap the smallest element found with the first element.
+ * Move the boundary between the sorted and unsorted regions one element to the right.
+ * Repeat the process for the next element until the array is sorted.
+ */
+
+/**
+ * Detailed Walkthrough
+ * --------------------
  * Initialization:
  * ----------------
- * pow(x, n) is the recursive function.
- * Base Cases:
- * If n is 0, return 1.
- * If n is 1, return x.
- * Recursive Case:
+ * n is set to the length of the array.
+ * The outer loop starts from the first element to the second-to-last element.
+ * Find the Minimum:
+ * -----------------
+ * For each position i, assume the element at index i is the smallest (minIndex = i).
+ * The inner loop starts from the element next to i and looks for the smallest element in the unsorted region.
+ * Comparison and Update:
+ * ----------------------
+ * If a smaller element is found (arr[j] < arr[minIndex]), update minIndex to the index of this smaller element.
+ * Swap Elements:
  * ---------------
- * For even n:
- * Divide n by 2 and recursively call pow(x, n/2). Square the result to get x^n.
- * For odd n:
- * Subtract 1 from n
- * to make it even, and then multiply the result of the recursive call pow(x, n-1) by x.
- * Result:
- * By repeatedly breaking down the problem using the recursive approach, you calculate
- * x^n efficiently.
- */
-function pow(x, n) {
-  if (n === 0) return 1; // Base case
-  if (n === 1) return x; // Base case
-  return x * pow(x, n - 1);
-}
-
-// Example usage
-console.log(pow(2, 3)); // Output: 8 (because 2^3 = 8)
-console.log(pow(5, 4)); // Output: 625 (because 5^4 = 625)
-console.log(pow(2, 0)); // Output: 1 (because 2^0 = 1)
-console.log(pow(3, 4)); // Output: 1 (because 2^0 = 1)
-
-/**
- * Factorial
- */
-function factorial(n) {
-  //base
-  if (n === 0) return 1;
-  if (n === 1) return 1;
-  return n * factorial(n - 1);
-}
-
-/**
- * productOfArray
- */
-function productOfArray(arr) {
-  //base
-  if (arr.length === 0) return 1;
-  if (
-    arr[0] === '' ||
-    arr[0] !== undefined ||
-    arr[0] === null ||
-    Number.isNaN(arr[0])
-  ) {
-    console.log('entered arr[0]:', arr[0]);
-    return arr[0] * productOfArray(arr.splice(1));
-  } else {
-    console.log('entered here');
-    //just ignore the element and continue
-    return productOfArray(arr.splice(1));
-  }
-}
-
-console.log(productOfArray([1, 2, , 5, , , , 3, 3, 5]));
-
-/**
- * Fibonacci
+ * After the inner loop completes, if minIndex is not equal to i, swap the element at minIndex with the element at i.
+ * This move ensures that the smallest element of the unsorted region is placed at the beginning of this region.
+ * Continue:
  * ---------
- * Detailed Walkthrough:
- * Base Cases:
- * -----------
- * If n is 0, return 0. (The 0th Fibonacci number is 0).
- * If n is 1, return 1. (The 1st Fibonacci number is 1).
- * Recursive Case:
- * ---------------
- * For any n > 1, return the sum of fibonacci(n - 1) and fibonacci(n - 2), which is the essence of the Fibonacci sequence.
- * Iterate and Display:
- * The example usage demonstrates iterating from 0 to 9 to display the first 10 Fibonacci numbers.
+ * Repeat the process for each element in the array until the array is sorted.
  */
 
-function fib(n) {
-  // add whatever parameters you deem necessary - good luck!
-  //base
-  if (n < 0) return;
-  if (n === 0) return 0;
-  if (n === 1) return 1;
-  //recursive functions for n-1 and n-2 are the essence of fibonacci series
-  return fib(n - 1) + fib(n - 2);
-}
+function selectionSort(arr) {
+  let n = arr.length;
 
-/**
- * Write a recursive function called reverse which accepts a string and returns a new string in reverse.
- */
-function reverse(str) {
-  // add whatever parameters you deem necessary - good luck!
-  //base
-  if (str.length === 0) return;
-  if (str.length === 1) return str;
-  return str[str.length - 1].concat(reverse(str.slice(0, str.length - 1)));
-}
+  for (let i = 0; i < n - 1; i++) {
+    // Assume the first element of the unsorted region is the minimum
+    let minIndex = i;
 
-/**
- * isPalindrome
- */
-function isPalindrome(str) {
-  // add whatever parameters you deem necessary - good luck!
-  //sanitise the str
-  let lowerCaseString = str.replace(/^a-zA-Z0-9/g, '').toLowerCase();
-  //basecheck
-  if (str.length === 0) return false;
-  //helper function to check isPalindrome
-  function checkPalindrome(start, end) {
-    //base
-    if (str[start] >= str[end]) {
-      //means that we have checked all the left and right pointers to match each other
-      //so it's palindrome
-      return true;
-    }
-
-    if (str[start] !== str[end]) {
-      return false;
-    }
-
-    // Move towards the center and continue checking
-    checkPalindrome(start + 1, end - 1);
-  }
-  // Start the recursion from the beginning and end of the string
-  return checkPalindrome(0, str.length - 1);
-}
-
-/**
- * Write a recursive function called someRecursive which accepts an array and a callback.
- * The function returns true if a single value in the array returns true when passed to the callback.
- * Otherwise it returns false.
- */
-function someRecursive(arr, cb) {
-  // add whatever parameters you deem necessary - good luck!
-  //base
-  if (arr.length === 0) return false;
-
-  // Check if the callback returns true for the first element
-  //Note: For single element satisfy, make positive assignment
-  if (cb(arr[0]) === true) {
-    return true;
-  }
-  // Recursively call the function on the rest of the array
-  return someRecursive(arr.slice(1), cb);
-}
-
-// Example usage:
-const isOdd = (num) => num % 2 !== 0;
-
-console.log(someRecursive([1, 2, 3, 4], isOdd)); // Output: true (since 1 is odd)
-console.log(someRecursive([2, 4, 6, 8], isOdd));
-/**
- * Write a recursive function called someRecursive which accepts an array and a callback.
- * The function returns true if all values in the array returns true when passed to the callback.
- * Otherwise it returns false.
- */
-function allRecursive(array, callback) {
-  // Base case: If the array is empty, return true
-  if (array.length === 0) return true;
-
-  // Check if the callback returns true for the first element
-  //Note: For all elements satisfy, make negative assignment
-  if (!callback(array[0])) return false;
-
-  // Recursively call the function on the rest of the array
-  return allRecursive(array.slice(1), callback);
-}
-
-const isEven = (num) => num % 2 === 0;
-
-console.log(allRecursive([2, 4, 6, 8], isEven)); // Output: true (since all are even)
-console.log(allRecursive([2, 3, 4, 6], isEven)); // Output: false (since 3 is not even)
-
-/**
- * Write a recursive function called flatten which accepts an array of arrays and returns a new array with all values flattened.
- */
-function flatten(arr) {
-  // add whatever parameters you deem necessary - good luck!
-  //Initialise an array to hold/push the flattened values
-  let result = [];
-
-  //create a helper recursive to flatten the array
-  function flatHelper(arr) {
-    //loop thr each arr element and check for it's Type
-    arr.forEach((eachSegment) => {
-      if (Array.isArray(eachSegment)) {
-        flatHelper(eachSegment);
-      } else {
-        result.push(eachSegment);
-      }
-    });
-  }
-
-  //Initialise the helper outside
-  flatHelper(arr);
-  return result;
-}
-
-// Example usage
-const nestedArray = [1, [2, [3, 4], [[5]]], 6];
-console.log(flatten(nestedArray)); // Output: [1, 2, 3, 4, 5, 6]
-
-function capitalizeFirst(arr) {
-  // add whatever parameters you deem necessary - good luck!
-  //base
-  if (arr.length === 0) return [];
-
-  //get the first element of arr
-  let firstElement = arr[0];
-  //capitalizeFirst letter
-  let capitalizeFirstElement = getCapitizedStr(firstElement);
-
-  //using concat, call recursive method to get all array elements capitalized
-  return [capitalizeFirstElement].concat(capitalizeFirst(arr.splice(1)));
-}
-
-function getCapitizedStr(str) {
-  let firstCharCapitalised = str.charAt(0).toUpperCase();
-  return firstCharCapitalised + str.slice(1);
-}
-// capitalizeFirst(['car','taco','banana']); // ['Car','Taco','Banana']
-
-/**
- * Write a recursive function called nestedEvenSum. Return the sum of all
- * even numbers in an object which may contain nested objects.
- */
-function nestedEvenSum(obj) {
-  // add whatever parameters you deem necessary - good luck!
-  //initialise sum
-  let sum = 0;
-
-  //create a helper function to recursively loop thr keys
-  function getHelper(innerObj) {
-    //loop thr all keys
-    for (let key in innerObj) {
-      let value = innerObj[key];
-      //Check if the type of value is number and it's even , if so, add it to sum
-      if (typeof value === 'number' && value % 2 === 0) {
-        sum += value;
-      }
-      if (typeof value === 'object' && value != null) {
-        getHelper(value);
+    // Find the minimum element in the unsorted region
+    for (let j = i + 1; j < n; j++) {
+      if (arr[j] < arr[minIndex]) {
+        minIndex = j;
       }
     }
-  }
 
-  //call the first recursive helper
-  getHelper(obj);
-  return sum;
-}
-
-// Example usage
-const nestedObj = {
-  a: 2,
-  b: {
-    b1: 4,
-    b2: {
-      b21: 6,
-      b22: 'not a number',
-    },
-    b3: 8,
-  },
-  c: {
-    c1: 'string',
-    c2: {
-      c21: 10,
-      c22: {
-        c221: 12,
-      },
-    },
-  },
-};
-
-console.log(nestedEvenSum(nestedObj)); //42
-
-/**
- * capitalizeWords for all letters in recursive way
- */
-function capitalizeWords(arr) {
-  // Base case: if the array is empty, return an empty array
-  if (arr.length === 0) return [];
-
-  // Capitalize the first word
-  const firstWord = arr[0].toUpperCase();
-
-  // Recursively call capitalizeWords on the rest of the array and combine the results
-  return [firstWord].concat(capitalizeWords(arr.slice(1)));
-}
-
-/**
- * capitalizeWords for all letters in normal way
- */
-function capitalizeWords(strArray) {
-  // add whatever parameters you deem necessary - good luck!
-  let result = [];
-  strArray.forEach((eachElement) => {
-    result.push(eachElement.toUpperCase());
-  });
-  return result;
-}
-
-// Example usage
-const wordsArray = ['hello', 'world', 'this', 'is', 'recursion'];
-console.log(capitalizeWords(wordsArray));
-
-/**
- * stringifyNumbers
- * Write a function called stringifyNumbers which takes in an object and finds all of the values which are numbers and converts them to strings. 
- * Recursion would be a great way to solve this!
-
-The exercise intends for you to create a new object with the numbers converted to strings, and not modify the original. 
-Keep the original object unchanged.
-*/
-function stringifyNumbers(originalObj) {
-  //create a new obj
-  let obj = {};
-  //iterate thr each keys in originalObj
-  for (let key in originalObj) {
-    let value = originalObj[key];
-    if (typeof value === 'number') {
-      //stringify that value
-      obj[key] = value.toString();
-    } else if (
-      typeof value === 'object' &&
-      !Array.isArray(value) &&
-      value !== null
-    ) {
-      //it's an object and sp continue the recursion
-      obj[key] = stringifyNumbers(value);
-    } else {
-      //keep the value as is
-      obj[key] = value;
-    }
-  }
-  return obj;
-}
-
-// Example usage
-const inputObj = {
-  num: 1,
-  test: [],
-  data: {
-    val: 4,
-    info: {
-      isRight: true,
-      random: 66,
-    },
-  },
-};
-
-console.log(stringifyNumbers(inputObj));
-// Output: { num: '1', test: [], data: { val: '4', info: { isRight: true, random: '66' } } }
-
-/**
- * Write a function called collectStrings which accepts an object and returns an
- * array of all the values in the object that have a typeof string
- */
-function collectStrings(obj) {
-  let result = [];
-  //create a helper function inorder to persist result Array
-  function helper(innerObj) {
-    for (let key in innerObj) {
-      let value = innerObj[key];
-      if (typeof value === 'string') {
-        result.push(value);
-      } else if (typeof value === 'object' && value !== null) {
-        helper(value);
-      }
+    // Swap the found minimum element with the first element of the unsorted region
+    if (minIndex !== i) {
+      [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]];
     }
   }
 
-  helper(obj);
-  return result;
+  return arr;
 }
 
 // Example usage
-const inputObjOne = {
-  a: 'hello',
-  b: {
-    b1: 'world',
-    b2: {
-      b21: 'foo',
-      b22: 42,
-    },
-    b3: null,
-  },
-  c: {
-    c1: 'bar',
-    c2: true,
-  },
-};
-
-console.log(collectStrings(inputObjOne)); // Output: ['hello', 'world', 'foo', 'bar'
+const arraySample = [64, 25, 12, 22, 11];
+console.log(selectionSort(arraySample)); // Output: [11, 12, 22, 25, 64]
