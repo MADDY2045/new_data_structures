@@ -44,6 +44,14 @@
  * Increment the length by one
  */
 
+/**
+ * Big O
+ * -----
+ * Insertion - O(1)
+ * Removal - depends O(1) to O(N)
+ * Searching - O(N)
+ * Access - O(N)
+ */
 //create a singly linked lists
 //create a base node class
 class Node {
