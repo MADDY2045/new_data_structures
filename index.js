@@ -239,6 +239,49 @@ class DoublyLinkedLists {
     this.length--;
     return removedNode;
   }
+
+  /**
+   * 1. Initialize the following pointers:
+   - current: set to the head of the doubly linked list.
+   - temp: set to null (will be used to swap next and prev pointers).
+
+    2. Loop through the list until current is not null:
+      a. Save the previous pointer of the current node in temp.
+          - temp = current.prev
+      b. Swap the next and prev pointers of the current node.
+          - current.prev = current.next
+          - current.next = temp
+      c. Move to the next node in the original list using the swapped prev pointer.
+          - current = current.prev
+
+    3. After exiting the loop, check if temp is not null:
+      a. Set the head of the list to the previous node of temp.
+          - if temp is not null:
+              head = temp.prev
+
+    4. The list is now reversed.
+
+  */
+  reverse() {
+    let current = this.head;
+    let temp = null;
+
+    // Swap next and prev for each node
+    while (current !== null) {
+      //Save the previous pointer of the current node in temp.
+      temp = current.prev;
+      //Swap the next and prev pointers of the current node.
+      current.prev = current.next;
+      current.next = temp;
+      //Move to the next node in the original list using the swapped prev pointer.
+      current = current.prev;
+    }
+
+    // Swap head and tail
+    if (temp !== null) {
+      this.head = temp.prev;
+    }
+  }
 }
 
 console.clear();
