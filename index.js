@@ -107,13 +107,45 @@ class BinarySearchTree {
     if (!found) return undefined;
     return current;
   }
+
+  /**
+   * Explanation:
+   * -------------
+   * Initialize Queue: Start with an empty queue and enqueue the root node.
+   * While Loop: Continue the loop until the queue is empty.
+   * Dequeue Node: Remove the front node from the queue and process it (e.g., print its value).
+   * Enqueue Children: Add all the child nodes (left and right) of the current node to the queue.
+   * Repeat
+   */
+  BFS() {
+    let queue = [];
+    let visitedNodes = [];
+    let node = this.root;
+    //Push the root node into the queue for the first time
+    queue.push(node);
+    while (queue.length) {
+      node = queue.shift();
+      visitedNodes.push(node.value);
+      if (node.left) queue.push(node.left); //connecting statement for while
+      if (node.right !== null) queue.push(node.right); //connecting statement for while
+    }
+    return visitedNodes;
+  }
 }
 
 //      10
-//    5     13
-//  2   7  11 16
+//    6     15
+//  3   8     20
 
 console.log('********** INSERT ***********');
 let bst = new BinarySearchTree();
-bst.insert(JSON.stringify(30, null, 2));
+bst.insert(10);
+bst.insert(6);
+bst.insert(15);
+bst.insert(3);
+bst.insert(8);
+bst.insert(20);
 console.log(bst);
+console.log('********** BFS ***********');
+let data = bst.BFS();
+console.log(data);
