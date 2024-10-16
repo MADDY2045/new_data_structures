@@ -131,6 +131,36 @@ class BinarySearchTree {
     }
     return visitedNodes;
   }
+
+  /**
+   * DFS
+   * Create a variable to store the values of nodes visited
+   * Store the root of the BST in a variable
+   * Write a helper function which accepts the value
+   *    push the value of the node to the variable that stores the values
+   *    if the node has a left property,
+   *        call the helper with left property on the node
+   *    if the node has a right property,
+   *        call the helper with right property on the node
+   * Invoke the helper function with the current variable
+   * Return the array
+   */
+  DfsPreOrder() {
+    let current = this.root;
+    let data = [];
+
+    function traverseDFS(node) {
+      data.push(node.value);
+      if (node.left) {
+        traverseDFS(node.left);
+      }
+      if (node.right) {
+        traverseDFS(node.right);
+      }
+    }
+    traverseDFS(current); //main recursive starts here
+    return data;
+  }
 }
 
 //      10
@@ -149,3 +179,6 @@ console.log(bst);
 console.log('********** BFS ***********');
 let data = bst.BFS();
 console.log(data);
+console.log('********** BFS ***********');
+let response = bst.DfsPreOrder();
+console.log(response);
