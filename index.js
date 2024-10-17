@@ -1,233 +1,123 @@
 /**
- * Binary heaps are fascinating data structures, mainly used to implement priority queues, and they come in two flavors:
- * Min-Heaps and Max-Heaps.
- *
- *
- * Min-Heap:
- * ---------
- * Property:
- * In a min-heap, the value of each node is greater than or equal to the value of its parent.
- * The smallest element is at the root.
- * Operations:
- * ------------
- * Insertion: Add the new element at the end of the heap, then "bubble up" to maintain heap property.
- * Deletion (Extract Min): Remove the root, replace it with the last element, then "bubble down" to maintain heap property.
- *
- *
- * Max-Heap
- * --------
- * Property:
- * In a max-heap, the value of each node is less than or equal to the value of its parent.
- * The largest element is at the root.
- * Operations:
- * -----------
- * Insertion: Add the new element at the end, then "bubble up".
- * Deletion (Extract Max): Remove the root, replace with the last element, then "bubble down".
- *
- * Structure
- * ----------
- * Array Representation: Binary heaps can be efficiently stored in arrays. For any given index i:
- * The parent node is at index (i-1) // 2.
- * The left child is at index 2*i + 1.
- * The right child is at index 2*i + 2.
+ * Hash tables
  */
 
 /**
  * Big O
- * Insertion - O (log N)
- * Removal - O(log N)
- * Search - O(N)
+ * Insert:O(1)
+ * Deletion:O(1)
+ * Access:O(1)
  */
-
-class MaxBinaryHeap {
-  constructor(args) {
-    this.values = [...args];
-  }
-
-  bubbleUp() {
-    let idx = this.values.length - 1;
-    const element = this.values[idx];
-    let values = this.values;
-    while (idx > 0) {
-      //parentIndex
-      let parentIndex = Math.floor((idx - 1) / 2);
-      let parent = values[parentIndex];
-      //compare the curretn item with parentItem
-      //Using indices calculated
-      if (element <= parent) break; //base
-      //otherwise
-      //swap the values
-      values[parentIndex] = element;
-      values[idx] = parent;
-      //now update the index to be parentidx
-      idx = parentIndex;
-    }
-  }
-
-  insert(element) {
-    this.values.push(element);
-    this.bubbleUp();
+class HashTable {
+  constructor(size = 5) {
+    this.keyMap = new Array(size);
   }
 
   /**
-   * Swap the first value in the values property with the last
-   * Pop from the values property, so we can return at end
-   * Have the new root "sink down" to correct spot
-   *  Your parent index starts at 0
-   *  Find the index of the left child: 2 * index + 1(should not be out of bound)
-   *  Find the index of the right child: 2 * index + 2(should not be out of bound)
-   *  If the left or right child is greater than the element..swap.
-   *  If both left and right children are larger, swap with the largest child
-   *  The child index you swapped becomes the new parent index
-   *  keep looping and swapping until neither child is larger than element
-   *  Return the old root
+   *
+   * @param {String} key
+   * @returns {Number}
    */
-  sinkDown() {
-    let idx = 0;
-    const length = this.values.length;
-    const element = this.values[0];
-    while (true) {
-      let leftChildIndex = 2 * idx + 1;
-      let rightChildIndex = 2 * idx + 2;
-      let leftChild, rightChild;
-      let swap = null;
-
-      if (leftChildIndex < length) {
-        leftChild = this.values[leftChildIndex];
-        if (leftChild > element) {
-          swap = leftChildIndex;
-        }
-      }
-      /**
-       * Handle scenarios when both left index
-       * and right index are larger than element
-       * and right index is largest
-       */
-      if (rightChildIndex < length) {
-        rightChild = this.values[rightChildIndex];
-        if (
-          (swap === null && rightChild > element) ||
-          (swap !== null && rightChild > leftChild)
-        ) {
-          swap = rightChildIndex;
-        }
-      }
-
-      if (swap === null) break;
-      this.values[idx] = this.values[swap];
-      this.values[swap] = element;
+  _hash(key) {
+    let total = 0;
+    let WEIRD_PRIME = 31;
+    for (let i = 0; i < Math.min(key.length, 100); i++) {
+      let char = key[i];
+      let value = char.toLowerCase().charCodeAt(0) - 96; //ASCI code to get alphabets range in smaller case
+      total = (total * WEIRD_PRIME + value) % this.keyMap.length;
     }
+    return total;
   }
 
-  extractMax() {
-    const max = this.values[0]; //max value
-    const end = this.values.pop(); //extract this last variable to sink down
-    if (this.values.length > 0) {
-      this.values[0] = end;
-      //sinkDown
-      this.sinkDown();
+  /**
+   * SET
+   * Accepts a key and a value
+   * Hashes the key
+   * Stores the key-valur pair in the hash table array
+   * via seperate chaining
+   */
+
+  set(key, value) {
+    let index = this._hash(key);
+    if (!this.keyMap[index]) {
+      this.keyMap[index] = [];
     }
-    return max;
+    this.keyMap[index].push([key, value]);
+    return this.keyMap;
+  }
+
+  /**
+   * SET
+   * Accepts a key
+   * Hashes the key
+   * Retrieves the key-value pair in the hash table
+   * if not found, return undefined
+   */
+  get(key) {
+    let hashIndex = this._hash(key);
+    if (this.keyMap[hashIndex]) {
+      for (let i = 0; i < this.keyMap[hashIndex].length; i++) {
+        if (key === this.keyMap[hashIndex][i][0]) {
+          return this.keyMap[hashIndex][i][1];
+        }
+      }
+    }
+    return undefined;
+  }
+
+  /**
+   * Object.values mode
+   */
+  values() {
+    let result = [];
+    for (let i = 0; i < this.keyMap.length; i++) {
+      if (this.keyMap[i]) {
+        for (let j = 0; j < this.keyMap[i].length; j++) {
+          result.push(this.keyMap[i][j][1]);
+        }
+      }
+    }
+    return Array.from(new Set(result));
+  }
+
+  /**
+   * Object.values mode
+   */
+  keys() {
+    let result = [];
+    for (let i = 0; i < this.keyMap.length; i++) {
+      if (this.keyMap[i]) {
+        for (let j = 0; j < this.keyMap[i].length; j++) {
+          result.push(this.keyMap[i][j][0]);
+        }
+      }
+    }
+    return result;
   }
 }
 
-/**
- * Priority queue
- * Write a min binary heap - lower number means higher priority
- * Each node has a val and a priority. Use the priority to build the heap
- * Enqueue method accepts a value and priority, makes a new node, and
- * puts it in the right spot based of its priority
- * Dequeue method removes root element, returns it, and rearranges
- * heap using priority
- */
-class PriorityQueue {
-  constructor() {
-    this.values = [];
-  }
-  enqueue(val, priority) {
-    let newNode = new Node(val, priority);
-    this.values.push(newNode);
-    this.bubbleUp();
-  }
-  bubbleUp() {
-    let idx = this.values.length - 1;
-    const element = this.values[idx];
-    while (idx > 0) {
-      let parentIdx = Math.floor((idx - 1) / 2);
-      let parent = this.values[parentIdx];
-      if (element.priority >= parent.priority) break;
-      this.values[parentIdx] = element;
-      this.values[idx] = parent;
-      idx = parentIdx;
-    }
-  }
-  dequeue() {
-    const min = this.values[0];
-    const end = this.values.pop();
-    if (this.values.length > 0) {
-      this.values[0] = end;
-      this.sinkDown();
-    }
-    return min;
-  }
-  sinkDown() {
-    let idx = 0;
-    const length = this.values.length;
-    const element = this.values[0];
-    while (true) {
-      let leftChildIdx = 2 * idx + 1;
-      let rightChildIdx = 2 * idx + 2;
-      let leftChild, rightChild;
-      let swap = null;
+console.clear();
+console.log('*********** HASH CREARTION ********');
+let newHash = new HashTable();
 
-      if (leftChildIdx < length) {
-        leftChild = this.values[leftChildIdx];
-        if (leftChild.priority < element.priority) {
-          swap = leftChildIdx;
-        }
-      }
-      if (rightChildIdx < length) {
-        rightChild = this.values[rightChildIdx];
-        if (
-          (swap === null && rightChild.priority < element.priority) ||
-          (swap !== null && rightChild.priority < leftChild.priority)
-        ) {
-          swap = rightChildIdx;
-        }
-      }
-      if (swap === null) break;
-      this.values[idx] = this.values[swap];
-      this.values[swap] = element;
-      idx = swap;
-    }
-  }
-}
-
-class Node {
-  constructor(val, priority) {
-    this.val = val;
-    this.priority = priority;
-  }
-}
-
-console.log('********CREATING HEAP*******');
-let heap = new MaxBinaryHeap([41, 39, 33, 18, 27, 12]);
-console.log('heap:::', heap);
-console.log('********INSERT*******');
-heap.insert(55);
-heap.insert(1);
-console.log('heap after insert:::', heap);
-console.log('********EXTRACT*******');
-let output = heap.extractMax();
-console.log('extracted value:', output);
-
-/******************* PRIORITY QUEUE *************************/
-let ER = new PriorityQueue();
-ER.enqueue('Concussion', 3);
-ER.enqueue('Common Cold', 5);
-ER.enqueue('Gunshot', 1);
-
-ER.enqueue('Labor Pain', 0);
-let dequedPriority = ER.dequeue();
-console.log('dequedPriority:', dequedPriority);
-console.log(ER);
+console.log('*********** SET ********');
+console.log('hash now:', newHash.set('blue', 'BLUE'));
+console.log('hash now:', newHash.set('orange', 'ORANGE'));
+console.log('hash now:', newHash.set('cyan', 'CYAN'));
+console.log('hash now:', newHash.set('green', 'GREEN'));
+console.log('hash now:', newHash.set('test', 'TEST'));
+console.log('hash now:', newHash.set('black', 'BLACK'));
+console.log('hash now:', newHash.set('hello', 'HELLO'));
+console.log('hash now:', newHash.set('helo', 'HELLO'));
+console.log('hash now:', newHash.set('heo', 'HE'));
+console.log('*********** GET ********');
+let currentValue = newHash.get('cyan');
+let currentValue2 = newHash.get('orange');
+console.log('retrieved value:', currentValue);
+console.log('retrieved value:', currentValue2);
+console.log('*********** VALUES ********');
+let result = newHash.values();
+console.log('result:', result);
+console.log('*********** KEYS ********');
+let keys = newHash.keys();
+console.log('keys:', keys);
