@@ -1,123 +1,111 @@
 /**
- * Hash tables
+ * Graphs
  */
 
-/**
- * Big O
- * Insert:O(1)
- * Deletion:O(1)
- * Access:O(1)
- */
-class HashTable {
-  constructor(size = 5) {
-    this.keyMap = new Array(size);
+class Graph {
+  constructor() {
+    this.adjacencyList = {};
   }
 
   /**
-   *
-   * @param {String} key
-   * @returns {Number}
+   * We are building an undirected graph
    */
-  _hash(key) {
-    let total = 0;
-    let WEIRD_PRIME = 31;
-    for (let i = 0; i < Math.min(key.length, 100); i++) {
-      let char = key[i];
-      let value = char.toLowerCase().charCodeAt(0) - 96; //ASCI code to get alphabets range in smaller case
-      total = (total * WEIRD_PRIME + value) % this.keyMap.length;
+  addVertex(vertex) {
+    if (!this.adjacencyList.hasOwnProperty(vertex)) {
+      this.adjacencyList[vertex] = [];
     }
-    return total;
+    return this;
   }
 
   /**
-   * SET
-   * Accepts a key and a value
-   * Hashes the key
-   * Stores the key-valur pair in the hash table array
-   * via seperate chaining
+   * Adding an edge
+   * The function should accept two
+   * vertices vertex1 and vertex2
+   * The function should find in the
+   * adjancency list, the key of vertex1
+   * and push vertex2 to the array
+   * The function should find in the
+   * adjancency list, the key of vertex2
+   * and push vertex1 to the array
    */
-
-  set(key, value) {
-    let index = this._hash(key);
-    if (!this.keyMap[index]) {
-      this.keyMap[index] = [];
+  addEdge(v1, v2) {
+    if (this.adjacencyList[v1]) {
+      this.adjacencyList[v1].push(v2);
     }
-    this.keyMap[index].push([key, value]);
-    return this.keyMap;
+    if (this.adjacencyList[v2]) {
+      this.adjacencyList[v2].push(v1);
+    }
   }
 
   /**
-   * SET
-   * Accepts a key
-   * Hashes the key
-   * Retrieves the key-value pair in the hash table
-   * if not found, return undefined
+   * Removing an edge
+   * This function should accept two vertices,
+   * v1 and v2
+   * The function should reassign the key of v1
+   * to be an array that does not contain v2
+   * The function should reassign the key of v2
+   * to be an array that does not contain v1
    */
-  get(key) {
-    let hashIndex = this._hash(key);
-    if (this.keyMap[hashIndex]) {
-      for (let i = 0; i < this.keyMap[hashIndex].length; i++) {
-        if (key === this.keyMap[hashIndex][i][0]) {
-          return this.keyMap[hashIndex][i][1];
-        }
-      }
+  removeEdge(v1, v2) {
+    if (this.adjacencyList[v1]) {
+      this.adjacencyList[v1] = this.adjacencyList[v1]?.filter(
+        (vertex) => vertex !== v2
+      );
     }
-    return undefined;
+    if (this.adjacencyList[v2]) {
+      this.adjacencyList[v2] = this.adjacencyList[v2]?.filter(
+        (vertex) => vertex !== v1
+      );
+    }
   }
 
   /**
-   * Object.values mode
+   * Removing a vertex
+   * The function should accespt a vertex to remove
+   * The function should loop as long as there are any
+   * other vertices in the adjaceny list for that vertex
+   * Inside of the loop, call our removeEdge function with
+   * the vertex we are removing and any values in the
+   * adjacency list for that vertex
+   * delete the key
    */
-  values() {
-    let result = [];
-    for (let i = 0; i < this.keyMap.length; i++) {
-      if (this.keyMap[i]) {
-        for (let j = 0; j < this.keyMap[i].length; j++) {
-          result.push(this.keyMap[i][j][1]);
-        }
-      }
+  removeVertex(vertex) {
+    //store the current vertex
+    // let tempVertex = vertex;
+    // let adjacencyListKeys = Object.keys(this.adjacencyList);
+    // adjacencyListKeys.forEach((eachItem) => {
+    //   this.removeEdge(eachItem, tempVertex);
+    // });
+    //Alternate way
+    while (this.adjacencyList[vertex].length) {
+      console.log('entered::::', this.adjacencyList[vertex], vertex);
+      const adjacentVertex = this.adjacencyList[vertex].pop();
+      console.log('adjacentVertex::::', adjacentVertex);
+      this.removeEdge(vertex, adjacentVertex);
     }
-    return Array.from(new Set(result));
-  }
 
-  /**
-   * Object.values mode
-   */
-  keys() {
-    let result = [];
-    for (let i = 0; i < this.keyMap.length; i++) {
-      if (this.keyMap[i]) {
-        for (let j = 0; j < this.keyMap[i].length; j++) {
-          result.push(this.keyMap[i][j][0]);
-        }
-      }
+    if (this.adjacencyList.hasOwnProperty(vertex)) {
+      delete this.adjacencyList[vertex];
     }
-    return result;
   }
 }
 
-console.clear();
-console.log('*********** HASH CREARTION ********');
-let newHash = new HashTable();
-
-console.log('*********** SET ********');
-console.log('hash now:', newHash.set('blue', 'BLUE'));
-console.log('hash now:', newHash.set('orange', 'ORANGE'));
-console.log('hash now:', newHash.set('cyan', 'CYAN'));
-console.log('hash now:', newHash.set('green', 'GREEN'));
-console.log('hash now:', newHash.set('test', 'TEST'));
-console.log('hash now:', newHash.set('black', 'BLACK'));
-console.log('hash now:', newHash.set('hello', 'HELLO'));
-console.log('hash now:', newHash.set('helo', 'HELLO'));
-console.log('hash now:', newHash.set('heo', 'HE'));
-console.log('*********** GET ********');
-let currentValue = newHash.get('cyan');
-let currentValue2 = newHash.get('orange');
-console.log('retrieved value:', currentValue);
-console.log('retrieved value:', currentValue2);
-console.log('*********** VALUES ********');
-let result = newHash.values();
-console.log('result:', result);
-console.log('*********** KEYS ********');
-let keys = newHash.keys();
-console.log('keys:', keys);
+console.log('**********ADD VERTEX************');
+let newGraph = new Graph();
+newGraph.addVertex('Tokyo');
+newGraph.addVertex('Dallas');
+newGraph.addVertex('Aspen');
+newGraph.addVertex('Chicago');
+console.log(newGraph);
+console.log('**********ADD EDGE ************');
+newGraph.addEdge('Tokyo', 'Dallas');
+newGraph.addEdge('Dallas', 'Aspen');
+newGraph.addEdge('Chicago', 'Aspen');
+console.log(newGraph);
+console.log('**********ADD EDGE ************');
+//newGraph.removeEdge('Tokyo', 'Dallas');
+//newGraph.removeEdge('Dallas', 'Aspen');
+console.log(newGraph);
+console.log('**********REMOVE VERTEX ************');
+newGraph.removeVertex('Dallas');
+console.log(newGraph);
