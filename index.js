@@ -32,6 +32,13 @@
  * The right child is at index 2*i + 2.
  */
 
+/**
+ * Big O
+ * Insertion - O (log N)
+ * Removal - O(log N)
+ * Search - O(N)
+ */
+
 class MaxBinaryHeap {
   constructor(args) {
     this.values = [...args];
